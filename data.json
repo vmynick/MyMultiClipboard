@@ -2,13 +2,88 @@
     "hotkey": "Ctrl+Alt+M",
     "window_width": 550,
     "window_height": 350,
-    "window_x": 0,
-    "window_y": 0,
+    "window_x": 2780,
+    "window_y": 941,
     "data": [
         {
             "name": "Example",
             "data": "http://example.com",
             "color": "#FFB3BA"
+        },
+        {
+            "name": "a",
+            "data": "a",
+            "color": "#baffc9"
+        },
+        {
+            "name": "d",
+            "data": "d",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "bb",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "ASAS",
+            "data": "QAQA",
+            "color": "#baffc9"
+        },
+        {
+            "name": "b",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "a",
+            "data": "a",
+            "color": "#baffc9"
+        },
+        {
+            "name": "d",
+            "data": "d",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "bb",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "ASAS",
+            "data": "QAQA",
+            "color": "#baffc9"
+        },
+        {
+            "name": "b",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "a",
+            "data": "a",
+            "color": "#baffc9"
+        },
+        {
+            "name": "d",
+            "data": "d",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "bb",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "ASAS",
+            "data": "QAQA",
+            "color": "#baffc9"
+        },
+        {
+            "name": "b",
+            "data": "b",
+            "color": "#d3d3d3"
         },
         {
             "name": "a",

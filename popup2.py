@@ -390,6 +390,18 @@ class PopupApp(QtWidgets.QWidget):
         self.shortcut_close = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+X"), self)
         self.shortcut_close.activated.connect(self.quit)
 
+        # Bind Ctrl+0-9 and Ctrl+A-F to select the first 16 items
+        for i, key in enumerate("0123456789ABCDEF"):
+            if i < self.listbox.count():
+                shortcut = QtWidgets.QShortcut(QtGui.QKeySequence(f"Ctrl+{key}"), self)
+                shortcut.activated.connect(lambda i=i: self.select_item(i))
+
+    def select_item(self, index):
+        if index < self.listbox.count():
+            self.listbox.setCurrentRow(index)
+            self.handle_enter()
+            self.release_all_modifiers()  # Release all modifier keys after selecting the item
+
     def paintEvent(self, event):
         # Paint the window with rounded corners and a 2px border
         painter = QPainter(self)
@@ -678,10 +690,16 @@ class PopupApp(QtWidgets.QWidget):
 
     def refresh_listbox(self):
         self.listbox.clear()
-        for item in self.filtered_data:
-            list_item = QtWidgets.QListWidgetItem("  " + item["name"])  # Add 2px padding to the left
+        for i, item in enumerate(self.filtered_data):
+            prefix = f"{i:X} " if i < 16 else "  "
+            list_item = QtWidgets.QListWidgetItem(prefix + item["name"])  # Add prefix for the first 16 items
             list_item.setBackground(QtGui.QColor(item["color"]))
             list_item.setForeground(QtGui.QColor("#00008B"))  # Set font color to dark blue
+            if i < 16:
+                font = list_item.font()
+                font.setBold(True)
+                list_item.setFont(font)
+                list_item.setForeground(QtGui.QColor("green"))  # Set font color to green for the first 16 items
             self.listbox.addItem(list_item)
         self.update_selected_item_border()
 
