@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-### xxxxxxxxxxx
-### xxxxxxxxxxx
-### xxxxxxxxxxx
+# -*- coding: utf-8 -*-
 import json
 import os
 import sys
