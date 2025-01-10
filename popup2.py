@@ -169,21 +169,60 @@ class PopupApp(QtWidgets.QWidget):
         # Hotkey Button
         hotkey_button = QtWidgets.QPushButton("H")
         hotkey_button.setFixedSize(20, 20)
-        hotkey_button.setStyleSheet("background-color: #cccccc; color: white; border: none; border-radius: 3px; padding: 3px; font-size: 12px; font-weight: bold;")
+        hotkey_button.setStyleSheet("""
+            QPushButton {
+                background-color: #cccccc; 
+                color: white; 
+                border: none; 
+                border-radius: 3px; 
+                padding: 3px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         hotkey_button.setToolTip("Adjust Hotkey")
         hotkey_button.clicked.connect(self.adjust_hotkey)
 
         # Minimize Button
         minimize_button = QtWidgets.QPushButton("_")
         minimize_button.setFixedSize(20,20)
-        minimize_button.setStyleSheet("background-color: #99ccff; color: white; border: none; border-radius: 3px; padding: 3px; font-size: 12px; font-weight: bold;")
+        minimize_button.setStyleSheet("""
+            QPushButton {
+                background-color: #99ccff; 
+                color: white; 
+                border: none; 
+                border-radius: 3px; 
+                padding: 3px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         minimize_button.setToolTip("Minimize")
         minimize_button.clicked.connect(self.hide_window)
 
         # Close Button
         close_button = QtWidgets.QPushButton("X")
         close_button.setFixedSize(20,20)
-        close_button.setStyleSheet("background-color: #ff9999; color: white; border: none; border-radius: 3px; padding: 3px; font-size: 12px; font-weight: bold;")
+        close_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ff9999; 
+                color: white; 
+                border: none; 
+                border-radius: 3px; 
+                padding: 3px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         close_button.setToolTip("Close")
         close_button.clicked.connect(self.close)
 
@@ -206,27 +245,87 @@ class PopupApp(QtWidgets.QWidget):
         button_layout = QtWidgets.QHBoxLayout()
         add_button = QtWidgets.QPushButton("Add", self)
         add_button.clicked.connect(self.add_line)
-        add_button.setStyleSheet("background-color: #b3e6b3; color: white; border-radius: 3px; height:20px; font-size: 12px; font-weight: bold;")
+        add_button.setStyleSheet("""
+            QPushButton {
+                background-color: #b3e6b3; 
+                color: white; 
+                border-radius: 3px; 
+                height:20px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         button_layout.addWidget(add_button)
 
         edit_button = QtWidgets.QPushButton("Edit", self)
         edit_button.clicked.connect(self.edit_line)
-        edit_button.setStyleSheet("background-color: #f7c6a3; color: white;border-radius: 3px; height:20px; font-size: 12px; font-weight: bold;")
+        edit_button.setStyleSheet("""
+            QPushButton {
+                background-color: #f7c6a3; 
+                color: white;
+                border-radius: 3px; 
+                height:20px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         button_layout.addWidget(edit_button)
 
         delete_button = QtWidgets.QPushButton("Delete", self)
         delete_button.clicked.connect(self.delete_line)
-        delete_button.setStyleSheet("background-color: #ffb3b3; color: white;border-radius: 3px; height:20px; font-size: 12px; font-weight: bold;")
+        delete_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ffb3b3; 
+                color: white;
+                border-radius: 3px; 
+                height:20px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         button_layout.addWidget(delete_button)
 
         export_button = QtWidgets.QPushButton("Export", self)
         export_button.clicked.connect(self.export_data)
-        export_button.setStyleSheet("background-color: #99ccff; color: white;border-radius: 3px; height:20px; font-size: 12px; font-weight: bold;")
+        export_button.setStyleSheet("""
+            QPushButton {
+                background-color: #99ccff; 
+                color: white;
+                border-radius: 3px; 
+                height:20px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         button_layout.addWidget(export_button)
 
         import_button = QtWidgets.QPushButton("Import", self)
         import_button.clicked.connect(self.import_data)
-        import_button.setStyleSheet("background-color: #d1b3ff; color: white;border-radius: 3px; height:20px; font-size: 12px; font-weight: bold;")
+        import_button.setStyleSheet("""
+            QPushButton {
+                background-color: #d1b3ff; 
+                color: white;
+                border-radius: 3px; 
+                height:20px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         button_layout.addWidget(import_button)
 
         layout.addLayout(button_layout)
@@ -248,36 +347,36 @@ class PopupApp(QtWidgets.QWidget):
         # self.center_window()
 
         # Bind Ctrl+Return to edit_line
-        self.shortcut_edit = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self)
+        self.shortcut_edit = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self.listbox)
         self.shortcut_edit.activated.connect(self.edit_line)
 
         # Bind Enter to handle_enter
-        self.shortcut_enter = QtWidgets.QShortcut(QtGui.QKeySequence("Return"), self)
+        self.shortcut_enter = QtWidgets.QShortcut(QtGui.QKeySequence("Return"), self.listbox)
         self.shortcut_enter.activated.connect(self.handle_enter)
 
         # Bind Ctrl+Delete to delete_line
-        self.shortcut_delete = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Delete"), self)
+        self.shortcut_delete = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Delete"), self.listbox)
         self.shortcut_delete.activated.connect(self.delete_line)
 
         # Bind Ctrl+Insert to add_line
-        self.shortcut_insert = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Insert"), self)
+        self.shortcut_insert = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Insert"), self.listbox)
         self.shortcut_insert.activated.connect(self.add_line)
+
+        # Bind Shift+Return to open_url
+        self.shortcut_open_url = QtWidgets.QShortcut(QtGui.QKeySequence("Shift+Return"), self.listbox)
+        self.shortcut_open_url.activated.connect(self.open_url)
+
+        # Bind Ctrl+Up to move item up
+        self.shortcut_move_up = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Up"), self.listbox)
+        self.shortcut_move_up.activated.connect(self.move_item_up)
+
+        # Bind Ctrl+Down to move item down
+        self.shortcut_move_down = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Down"), self.listbox)
+        self.shortcut_move_down.activated.connect(self.move_item_down)
 
         # Bind ESC to hide the window
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence("Esc"), self)
         self.shortcut_esc.activated.connect(self.hide_window)
-
-        # Bind Shift+Return to open_url
-        self.shortcut_open_url = QtWidgets.QShortcut(QtGui.QKeySequence("Shift+Return"), self)
-        self.shortcut_open_url.activated.connect(self.open_url)
-
-        # Bind Ctrl+Up to move item up
-        self.shortcut_move_up = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Up"), self)
-        self.shortcut_move_up.activated.connect(self.move_item_up)
-
-        # Bind Ctrl+Down to move item down
-        self.shortcut_move_down = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Down"), self)
-        self.shortcut_move_down.activated.connect(self.move_item_down)
 
         # Bind Ctrl+H to open hotkey adjust window
         self.shortcut_hotkey_adjust = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+H"), self)
@@ -312,6 +411,7 @@ class PopupApp(QtWidgets.QWidget):
         painter.drawText(QRect(10, 10, self.width() - 20, 40), Qt.AlignLeft, "MyMultiClipboard")
 
     def open_add_edit_popup(self, title, name_label, data_label, current_name=None, current_data=None, current_color=None, index=None):
+        self.release_all_modifiers()  # Release all modifier keys
         popup = QtWidgets.QDialog(self)
         popup.setWindowTitle(title)
         popup.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.Dialog)
@@ -319,6 +419,8 @@ class PopupApp(QtWidgets.QWidget):
         popup.setMinimumWidth(600)  # Ensures minimum width of 600px
         popup.setMinimumHeight(250)  # Increase height to ensure buttons are visible
         popup.setModal(True)
+        popup.setFocusPolicy(Qt.StrongFocus)  # Enable focus for the dialog
+        popup.setAttribute(Qt.WA_ShowWithoutActivating, False)  # Allow the dialog to be activated
 
         layout = QtWidgets.QVBoxLayout()
 
@@ -328,7 +430,19 @@ class PopupApp(QtWidgets.QWidget):
 
         name_entry = QtWidgets.QLineEdit(popup)
         name_entry.setText(current_name or "")
-        name_entry.setStyleSheet(f"background-color: {current_color or '#2d2d2d'}; color: #00008B; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        name_entry.setStyleSheet(f"""
+            QLineEdit {{
+                background-color: {current_color or '#2d2d2d'}; 
+                color: #00008B; 
+                border: solid 1px #ccc; 
+                border-radius: 3px; 
+                height:30px; 
+                font-size: 14px;
+            }}
+            QLineEdit:focus {{
+                border: 2px solid gray;
+            }}
+        """)
         layout.addWidget(name_entry)
 
         data_label_widget = QtWidgets.QLabel(data_label, popup)
@@ -337,7 +451,19 @@ class PopupApp(QtWidgets.QWidget):
 
         data_entry = QtWidgets.QLineEdit(popup)
         data_entry.setText(current_data or "")
-        data_entry.setStyleSheet(f"background-color: {current_color or '#2d2d2d'}; color: #00008B; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        data_entry.setStyleSheet(f"""
+            QLineEdit {{
+                background-color: {current_color or '#2d2d2d'}; 
+                color: #00008B; 
+                border: solid 1px #ccc; 
+                border-radius: 3px; 
+                height:30px; 
+                font-size: 14px;
+            }}
+            QLineEdit:focus {{
+                border: 2px solid gray;
+            }}
+        """)
         layout.addWidget(data_entry)
 
         color_label_widget = QtWidgets.QLabel("Choose color:", popup)
@@ -348,33 +474,87 @@ class PopupApp(QtWidgets.QWidget):
         color_buttons = []
         for color in DEFAULT_CONFIG["colors"]:
             color_button = QtWidgets.QPushButton("", popup)
-            color_button.setStyleSheet(f"background-color: {color}; border-radius: 3px; height:30px; width:30px;")
+            color_button.setStyleSheet(f"""
+                QPushButton {{
+                    background-color: {color}; 
+                    border-radius: 3px; 
+                    height:30px; 
+                    width:30px;
+                }}
+                QPushButton:focus {{
+                    border: 2px solid gray;
+                }}
+            """)
             color_button.setCheckable(True)
             color_buttons.append(color_button)
             color_layout.addWidget(color_button)
             if color == current_color:
                 color_button.setChecked(True)
-                color_button.setStyleSheet(f"background-color: {color}; border: 2px solid black; border-radius: 3px; height:30px; width:30px;")
+                color_button.setStyleSheet(f"""
+                    QPushButton {{
+                        background-color: {color}; 
+                        border: 2px solid black; 
+                        border-radius: 3px; 
+                        height:30px; 
+                        width:30px;
+                    }}
+                    QPushButton:focus {{
+                        border: 2px solid gray;
+                    }}
+                """)
             else:
-                color_button.setStyleSheet(f"background-color: {color}; border-radius: 3px; height:30px; width:30px;")
+                color_button.setStyleSheet(f"""
+                    QPushButton {{
+                        background-color: {color}; 
+                        border-radius: 3px; 
+                        height:30px; 
+                        width:30px;
+                    }}
+                    QPushButton:focus {{
+                        border: 2px solid gray;
+                    }}
+                """)
             color_button.clicked.connect(lambda ch, btn=color_button: self.highlight_selected_color(btn, color_buttons, name_entry, data_entry))
         layout.addLayout(color_layout)
 
         button_layout = QtWidgets.QHBoxLayout()
 
         ok_button = QtWidgets.QPushButton("OK", popup)
-        ok_button.setStyleSheet("background-color: #0099cc; color: white; height:30px; border: solid 1px #6600cc;")
+        ok_button.setStyleSheet("""
+            QPushButton {
+                background-color: #0099cc; 
+                color: white; 
+                height:30px; 
+                border: solid 1px #6600cc;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         ok_button.clicked.connect(lambda: self.submit_popup(name_entry, data_entry, color_buttons, popup, index))
         button_layout.addWidget(ok_button)
 
         cancel_button = QtWidgets.QPushButton("Cancel", popup)
-        cancel_button.setStyleSheet("background-color: #ff9999; color: white; height:30px; border: solid 1px #6600cc;")
+        cancel_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ff9999; 
+                color: white; 
+                height:30px; 
+                border: solid 1px #6600cc;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         cancel_button.clicked.connect(popup.close)
         button_layout.addWidget(cancel_button)
 
         layout.addLayout(button_layout)
 
         popup.setLayout(layout)
+        popup.setFocus()
+        popup.show()
+        self.release_all_modifiers()  # Release all modifier keys after showing the popup
         popup.exec_()
 
     def highlight_selected_color(self, selected_button, color_buttons, name_entry, data_entry):
@@ -407,7 +587,10 @@ class PopupApp(QtWidgets.QWidget):
         if item:
             index = self.listbox.row(item)
             content = self.data[index]["data"]  # Ensure the correct data is copied
-            threading.Thread(target=pyperclip.copy, args=(content,)).start()  # Copy to clipboard in a separate thread
+            if content.startswith("http://") or content.startswith("https://"):
+                webbrowser.open(content)  # Open the link in the default browser
+            else:
+                threading.Thread(target=pyperclip.copy, args=(content,)).start()  # Copy to clipboard in a separate thread
             threading.Thread(target=winsound.Beep, args=(1000, 500)).start()  # Make a more noticeable beep sound in a separate thread
             self.hide()
             self.send_to_systray()
@@ -567,8 +750,13 @@ class PopupApp(QtWidgets.QWidget):
         self.show()
         self.focus_thread = FocusThread(self)
         self.focus_thread.start()
-        keyboard.release('ctrl')  # Release the Ctrl key to prevent it from getting stuck
+        self.release_all_modifiers()  # Release all modifier keys
         self.activateWindow()
+
+    def release_all_modifiers(self):
+        # Release all modifier keys to prevent them from getting stuck
+        for key in ['ctrl', 'alt', 'shift', 'win']:
+            keyboard.release(key)
 
     def set_focus_on_listbox(self):
         self.listbox.setFocus()
@@ -669,18 +857,16 @@ class PopupApp(QtWidgets.QWidget):
         self.listbox.setFocus()
 
     def open_url(self):
-        #Open the selected item in the default browser if it is a valid URL."""
+        # Open the selected item in the default browser if it is a valid URL.
         item = self.listbox.currentItem()
         if item:
             index = self.listbox.row(item)
             content = self.filtered_data[index]["data"]
-            if content.startswith("http://") or content.startswith("https://"):
-                self.hide()
-                self.send_to_systray()
-                self.update_tray_menu()                
-                webbrowser.open(content)
-            else:
-                QtWidgets.QMessageBox.warning(self, "Invalid URL", "The selected item is not a valid URL.")
+            threading.Thread(target=pyperclip.copy, args=(content,)).start()  # Copy to clipboard in a separate thread
+            threading.Thread(target=winsound.Beep, args=(1000, 500)).start()  # Make a more noticeable beep sound in a separate thread
+            self.hide()
+            self.send_to_systray()
+            self.update_tray_menu()
 
     def adjust_hotkey(self):
         self.hotkey_dialog = QtWidgets.QDialog(self)
@@ -690,6 +876,8 @@ class PopupApp(QtWidgets.QWidget):
         self.hotkey_dialog.setMinimumWidth(300)
         self.hotkey_dialog.setMinimumHeight(150)  # Increase height to ensure buttons are visible
         self.hotkey_dialog.setModal(True)
+        self.hotkey_dialog.setFocusPolicy(Qt.StrongFocus)  # Enable focus for the dialog
+        self.hotkey_dialog.setAttribute(Qt.WA_ShowWithoutActivating, False)  # Allow the dialog to be activated
 
         layout = QtWidgets.QVBoxLayout()
 
@@ -704,7 +892,19 @@ class PopupApp(QtWidgets.QWidget):
             "Ctrl+Alt+Shift", "Ctrl+Win", "Alt+Win", "Shift+Win", "Ctrl+Alt+Win", 
             "Ctrl+Shift+Win", "Alt+Shift+Win", "Ctrl+Alt+Shift+Win"
         ])
-        self.modifier_dropdown.setStyleSheet("background-color: #2d2d2d; color: white; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        self.modifier_dropdown.setStyleSheet("""
+            QComboBox {
+                background-color: #2d2d2d; 
+                color: white; 
+                border: solid 1px #ccc; 
+                border-radius: 3px; 
+                height:30px; 
+                font-size: 14px;
+            }
+            QComboBox:focus {
+                border: 2px solid gray;
+            }
+        """)
         layout.addWidget(self.modifier_dropdown)
 
         # Dropdown for keys
@@ -715,7 +915,19 @@ class PopupApp(QtWidgets.QWidget):
             "3", "4", "5", "6", "7", "8", "9", "0", "F1", "F2", "F3", "F4", "F5", 
             "F6", "F7", "F8", "F9", "F10", "F11", "F12"
         ])
-        self.key_dropdown.setStyleSheet("background-color: #2d2d2d; color: white; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        self.key_dropdown.setStyleSheet("""
+            QComboBox {
+                background-color: #2d2d2d; 
+                color: white; 
+                border: solid 1px #ccc; 
+                border-radius: 3px; 
+                height:30px; 
+                font-size: 14px;
+            }
+            QComboBox:focus {
+                border: 2px solid gray;
+            }
+        """)
         layout.addWidget(self.key_dropdown)
 
         # Set current hotkey in dropdowns
@@ -727,19 +939,42 @@ class PopupApp(QtWidgets.QWidget):
         button_layout = QtWidgets.QHBoxLayout()
 
         ok_button = QtWidgets.QPushButton("OK", self.hotkey_dialog)
-        ok_button.setStyleSheet("background-color: #0099cc; color: white; height:30px; border: solid 1px #6600cc;")
+        ok_button.setStyleSheet("""
+            QPushButton {
+                background-color: #0099cc; 
+                color: white; 
+                height:30px; 
+                border: solid 1px #6600cc;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         ok_button.clicked.connect(self.save_new_hotkey)
         button_layout.addWidget(ok_button)
 
         cancel_button = QtWidgets.QPushButton("Cancel", self.hotkey_dialog)
-        cancel_button.setStyleSheet("background-color: #ff9999; color: white; height:30px; border: solid 1px #6600cc;")
+        cancel_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ff9999; 
+                color: white; 
+                height:30px; 
+                border: solid 1px #6600cc;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
         cancel_button.clicked.connect(self.hotkey_dialog.close)
         button_layout.addWidget(cancel_button)
 
         layout.addLayout(button_layout)
 
         self.hotkey_dialog.setLayout(layout)
+        self.hotkey_dialog.setFocus()
         self.hotkey_dialog.show()
+        self.release_all_modifiers()  # Release all modifier keys after showing the dialog
+        self.hotkey_dialog.exec_()
 
     def save_new_hotkey(self):
         modifier = self.modifier_dropdown.currentText()
@@ -824,6 +1059,7 @@ if __name__ == "__main__":
     def listen_hotkeys():
         hotkey = config.get("hotkey", "ctrl+alt+p")
         keyboard.add_hotkey(hotkey, window.show_and_focus, suppress=True)  # Suppress the hotkey globally
+        window.release_all_modifiers()  # Release all modifier keys after hotkey is pressed
 							   
 		 
     hotkey_thread = threading.Thread(target=listen_hotkeys, daemon=True)

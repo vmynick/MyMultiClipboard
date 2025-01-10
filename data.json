@@ -1,9 +1,9 @@
 {
-    "hotkey": "Ctrl+Shift+Y",
+    "hotkey": "Ctrl+Alt+M",
     "window_width": 550,
     "window_height": 350,
-    "window_x": 2367,
-    "window_y": 952,
+    "window_x": 2628,
+    "window_y": 987,
     "data": [
         {
             "name": "Example",
@@ -16,18 +16,23 @@
             "color": "#baffc9"
         },
         {
+            "name": "d",
+            "data": "d",
+            "color": "#d3d3d3"
+        },
+        {
             "name": "bb",
             "data": "b",
             "color": "#d3d3d3"
         },
         {
-            "name": "b",
-            "data": "b",
-            "color": "#d3d3d3"
+            "name": "ASAS",
+            "data": "QAQA",
+            "color": "#baffc9"
         },
         {
-            "name": "d",
-            "data": "d",
+            "name": "b",
+            "data": "b",
             "color": "#d3d3d3"
         }
     ]
