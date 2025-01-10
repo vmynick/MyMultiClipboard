@@ -1,72 +1,14 @@
 {
-    "hotkey": "Ctrl+ALT+M",
-    "window_width": 650,
+    "hotkey": "ctrl+alt+p",
+    "window_width": 550,
     "window_height": 350,
+    "window_x": 2734,
+    "window_y": 329,
     "data": [
         {
-            "name": "http://example.com",
+            "name": "Example",
             "data": "http://example.com",
             "color": "#FFB3BA"
-        },
-        {
-            "name": "Link1 - example.com",
-            "data": "http://example.com",
-            "color": "#ffb3ba"
-        },
-        {
-            "name": "1234",
-            "data": "1234125236000000999AA",
-            "color": "#FFB3BA"
-        },
-        {
-            "name": "qqq",
-            "data": "33ee",
-            "color": "#FFB3BA"
-        },
-        {
-            "name": "wwss",
-            "data": "wwss",
-            "color": "#e6b3ff"
-        },
-        {
-            "name": "wwW",
-            "data": "abcdefghijkl",
-            "color": "#bae1ff"
-        },
-        {
-            "name": "ABC",
-            "data": "zzzzzzzzwewe123",
-            "color": "#bae1ff"
-        },
-        {
-            "name": "ABC",
-            "data": "012",
-            "color": "#baffc9"
-        },
-        {
-            "name": "YY",
-            "data": "XX",
-            "color": "#baffc9"
-        },
-        {
-            "name": "ioio",
-            "data": "ioio",
-            "color": "#baffc9"
-        },
-        {
-            "name": "0101",
-            "data": "000",
-            "color": "#ffffba"
-        },
-        {
-            "name": "Example data line3",
-            "data": "Example data line 1000",
-            "color": "#d3d3d3"
-        },
-        {
-            "name": "rtzertzr",
-            "data": "zrz",
-            "color": "#d3d3d3"
         }
     ]
 }

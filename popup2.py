@@ -21,13 +21,17 @@ import winsound  # Add this import for a more noticeable beep sound
 import pynput  # Add this import for global hotkey
 import base64
 from icon_base64 import encoded_icon  # Import the base64 string
+from config import VERSION
 
 # Constants
 DEFAULT_CONFIG = {
     "hotkey": "ctrl+alt+p",
     "window_width": 850,
-    "window_height": 600,    
-    "colors": ["#D3D3D3", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", "#D1BAFF", "#FFB3E6", "#FFB3FF", "#E6B3FF"]  # Change first color to default gray
+    "window_height": 600,
+    "window_x": 100,  # Default window x position
+    "window_y": 100,  # Default window y position
+    "colors": ["#D3D3D3", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", "#D1BAFF", "#FFB3E6", "#FFB3FF", "#E6B3FF"],  # Change first color to default gray
+    "version": VERSION
 }
 BASE_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))  # Use sys.argv[0] for portability
 DATA_FILE = os.path.join(BASE_DIR, "data.json")
@@ -41,6 +45,44 @@ class FocusThread(QtCore.QThread):
     def run(self):
         QtCore.QTimer.singleShot(100, self.window.set_focus_on_listbox)
 
+class ResizeHandle(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setCursor(Qt.SizeFDiagCursor)
+        self.setFixedSize(16, 16)
+        self.is_resizing = False
+        self.start_pos = None
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        pen = painter.pen()
+        pen.setColor(Qt.gray)  # Change color to gray
+        pen.setWidth(2)
+        painter.setPen(pen)
+        for i in range(3):
+            painter.drawLine(4 + i * 4, 12, 12, 4 + i * 4)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.is_resizing = True
+            self.start_pos = event.globalPos()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if self.is_resizing:
+            delta = event.globalPos() - self.start_pos
+            new_width = max(self.parent().minimumWidth(), self.parent().width() + delta.x())
+            new_height = max(self.parent().minimumHeight(), self.parent().height() + delta.y())
+            self.parent().resize(new_width, new_height)
+            self.start_pos = event.globalPos()
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.is_resizing = False
+            self.parent().save_data()  # Save the window size after resizing
+            event.accept()
+
 class PopupApp(QtWidgets.QWidget):
     def __init__(self, config):
         super().__init__()
@@ -51,6 +93,9 @@ class PopupApp(QtWidgets.QWidget):
         self.load_data()
         self.init_ui()
         self.tray_icon = None
+        self.is_dragging = False
+        self.drag_position = None
+        self.version_label = None
         # self.setWindowTitle("MyMultiClipboard")
         # self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)  # Keep the window on top        
 
@@ -67,6 +112,8 @@ class PopupApp(QtWidgets.QWidget):
                         "hotkey": DEFAULT_CONFIG["hotkey"],
                         "window_width": DEFAULT_CONFIG["window_width"],
                         "window_height": DEFAULT_CONFIG["window_height"],
+                        "window_x": DEFAULT_CONFIG["window_x"],
+                        "window_y": DEFAULT_CONFIG["window_y"],
                         "data": [{"name": "Example", "data": "http://example.com", "color": "#FFB3BA"}]
                     }, f)
             with open(DATA_FILE, "r") as f:
@@ -74,6 +121,8 @@ class PopupApp(QtWidgets.QWidget):
                 self.config["hotkey"] = file_data.get("hotkey", DEFAULT_CONFIG["hotkey"])
                 self.config["window_width"] = file_data.get("window_width", DEFAULT_CONFIG["window_width"])
                 self.config["window_height"] = file_data.get("window_height", DEFAULT_CONFIG["window_height"])
+                self.config["window_x"] = file_data.get("window_x", DEFAULT_CONFIG["window_x"])
+                self.config["window_y"] = file_data.get("window_y", DEFAULT_CONFIG["window_y"])
                 self.data = file_data.get("data", [])
                 if not isinstance(self.data, list):
                     raise ValueError("Data must be a list.")
@@ -86,12 +135,16 @@ class PopupApp(QtWidgets.QWidget):
             self.config["hotkey"] = DEFAULT_CONFIG["hotkey"]
             self.config["window_width"] = DEFAULT_CONFIG["window_width"]
             self.config["window_height"] = DEFAULT_CONFIG["window_height"]
+            self.config["window_x"] = DEFAULT_CONFIG["window_x"]
+            self.config["window_y"] = DEFAULT_CONFIG["window_y"]
             self.data = [{"name": "Example", "data": "http://example.com"}]
             with open(DATA_FILE, "w") as f:
                 json.dump({
                     "hotkey": self.config["hotkey"],
                     "window_width": self.config["window_width"],
                     "window_height": self.config["window_height"],
+                    "window_x": self.config["window_x"],
+                    "window_y": self.config["window_y"],
                     "data": self.data
                 }, f)
         self.filtered_data = self.data[:]
@@ -101,7 +154,9 @@ class PopupApp(QtWidgets.QWidget):
         self.update()
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFixedSize(self.config["window_width"], self.config["window_height"])
+        self.setMinimumSize(550, 350)  # Set minimum size
+        self.resize(self.config["window_width"], self.config["window_height"])
+        self.move(self.config["window_x"], self.config["window_y"])
 
         layout = QtWidgets.QVBoxLayout()
 
@@ -177,10 +232,22 @@ class PopupApp(QtWidgets.QWidget):
         button_layout.addWidget(import_button)
 
         layout.addLayout(button_layout)
+
+        # Horizontal layout for version label and resize handle
+        bottom_layout = QtWidgets.QHBoxLayout()
+        self.version_label = QtWidgets.QLabel(f"Version {self.config['version']}", self)
+        self.version_label.setStyleSheet("color: gray;")
+        bottom_layout.addWidget(self.version_label, alignment=QtCore.Qt.AlignLeft)
+
+        resize_handle = ResizeHandle(self)
+        bottom_layout.addWidget(resize_handle, alignment=QtCore.Qt.AlignRight)
+
+        layout.addLayout(bottom_layout)
+
         self.setLayout(layout)
 
         # Center the window on the screen
-        self.center_window()
+        # self.center_window()
 
         # Bind Ctrl+Return to edit_line
         self.shortcut_edit = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self)
@@ -417,6 +484,8 @@ class PopupApp(QtWidgets.QWidget):
                         "hotkey": self.config["hotkey"],
                         "window_width": self.config["window_width"],
                         "window_height": self.config["window_height"],
+                        "window_x": self.x(),
+                        "window_y": self.y(),
                         "data": self.data
                     }, f, indent=4)
                 QtWidgets.QMessageBox.information(self, "Export Successful", "Data exported successfully.")
@@ -451,6 +520,8 @@ class PopupApp(QtWidgets.QWidget):
                 "hotkey": self.config["hotkey"],
                 "window_width": self.config["window_width"],
                 "window_height": self.config["window_height"],
+                "window_x": self.x(),
+                "window_y": self.y(),
                 "data": self.data
             }, f, indent=4)
 
@@ -678,6 +749,29 @@ class PopupApp(QtWidgets.QWidget):
         hotkey = self.config.get("hotkey", "ctrl+alt+p")
         keyboard.add_hotkey(hotkey, self.show_and_focus)
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.is_dragging = True
+            self.drag_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if self.is_dragging:
+            self.move(event.globalPos() - self.drag_position)
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.is_dragging = False
+            self.save_data()  # Save the window position after moving
+            event.accept()
+
+    def resizeEvent(self, event):
+        self.config["window_width"] = self.width()
+        self.config["window_height"] = self.height()
+        self.save_data()
+        super().resizeEvent(event)
+
 if __name__ == "__main__":
     # Hide the console window
     ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
@@ -690,6 +784,8 @@ if __name__ == "__main__":
             config["hotkey"]        = file_data.get("hotkey",        DEFAULT_CONFIG["hotkey"])
             config["window_width"]  = file_data.get("window_width",  DEFAULT_CONFIG["window_width"])
             config["window_height"] = file_data.get("window_height", DEFAULT_CONFIG["window_height"])
+            config["window_x"]      = file_data.get("window_x",      DEFAULT_CONFIG["window_x"])
+            config["window_y"]      = file_data.get("window_y",      DEFAULT_CONFIG["window_y"])
 
     # Create application
     app = QtWidgets.QApplication(sys.argv)
