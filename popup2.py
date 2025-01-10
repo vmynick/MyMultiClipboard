@@ -1036,6 +1036,9 @@ if __name__ == "__main__":
     # Hide the console window
     ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
     
+    # Create application
+    app = QtWidgets.QApplication(sys.argv)
+    
     # Load config
     config = DEFAULT_CONFIG.copy()
     if os.path.exists(DATA_FILE):
@@ -1047,9 +1050,28 @@ if __name__ == "__main__":
             config["window_x"]      = file_data.get("window_x",      DEFAULT_CONFIG["window_x"])
             config["window_y"]      = file_data.get("window_y",      DEFAULT_CONFIG["window_y"])
 
-    # Create application
-    app = QtWidgets.QApplication(sys.argv)
-						  
+    # Adjust window position and size if out of screen boundaries
+    screen_geometry = QtWidgets.QDesktopWidget().screenGeometry()
+    if config["window_x"] + config["window_width"] > screen_geometry.width():
+        config["window_x"] = (screen_geometry.width() - config["window_width"]) // 2
+    if config["window_y"] + config["window_height"] > screen_geometry.height():
+        config["window_y"] = (screen_geometry.height() - config["window_height"]) // 2
+    if config["window_x"] < 0:
+        config["window_x"] = 0
+    if config["window_y"] < 0:
+        config["window_y"] = 0
+
+    # Save adjusted config to data.json
+    with open(DATA_FILE, "w") as f:
+        json.dump({
+            "hotkey": config["hotkey"],
+            "window_width": config["window_width"],
+            "window_height": config["window_height"],
+            "window_x": config["window_x"],
+            "window_y": config["window_y"],
+            "data": file_data.get("data", [])
+        }, f, indent=4)
+
     window = PopupApp(config)
     window.show()						 
     window.send_to_systray()
