@@ -1,14 +1,34 @@
 {
-    "hotkey": "ctrl+alt+p",
+    "hotkey": "Ctrl+Shift+Y",
     "window_width": 550,
     "window_height": 350,
-    "window_x": 2734,
-    "window_y": 329,
+    "window_x": 2367,
+    "window_y": 952,
     "data": [
         {
             "name": "Example",
             "data": "http://example.com",
             "color": "#FFB3BA"
+        },
+        {
+            "name": "a",
+            "data": "a",
+            "color": "#baffc9"
+        },
+        {
+            "name": "bb",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "b",
+            "data": "b",
+            "color": "#d3d3d3"
+        },
+        {
+            "name": "d",
+            "data": "d",
+            "color": "#d3d3d3"
         }
     ]
 }

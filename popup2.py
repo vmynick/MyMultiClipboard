@@ -445,7 +445,10 @@ class PopupApp(QtWidgets.QWidget):
             return
         new_item = {"name": new_name, "data": new_data, "color": new_color}
         if index is None:
-            self.data.append(new_item)
+            if self.selected_index != -1:
+                self.data.insert(self.selected_index + 1, new_item)
+            else:
+                self.data.append(new_item)
         else:
             self.data[index] = new_item
         self.filtered_data = self.data[:]
@@ -690,13 +693,36 @@ class PopupApp(QtWidgets.QWidget):
 
         layout = QtWidgets.QVBoxLayout()
 
-        label = QtWidgets.QLabel("Press the new hotkey (Ctrl+Alt+Key):", self.hotkey_dialog)
+        label = QtWidgets.QLabel("Select the new hotkey:", self.hotkey_dialog)
         label.setStyleSheet("color: white; height:30px; font-size: 14px;")
         layout.addWidget(label)
 
-        self.hotkey_input = QtWidgets.QLineEdit(self.hotkey_dialog)
-        self.hotkey_input.setStyleSheet("background-color: #2d2d2d; color: white; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
-        layout.addWidget(self.hotkey_input)
+        # Dropdown for modifiers
+        self.modifier_dropdown = QtWidgets.QComboBox(self.hotkey_dialog)
+        self.modifier_dropdown.addItems([
+            "Ctrl", "Alt", "Shift", "Ctrl+Alt", "Ctrl+Shift", "Alt+Shift", 
+            "Ctrl+Alt+Shift", "Ctrl+Win", "Alt+Win", "Shift+Win", "Ctrl+Alt+Win", 
+            "Ctrl+Shift+Win", "Alt+Shift+Win", "Ctrl+Alt+Shift+Win"
+        ])
+        self.modifier_dropdown.setStyleSheet("background-color: #2d2d2d; color: white; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        layout.addWidget(self.modifier_dropdown)
+
+        # Dropdown for keys
+        self.key_dropdown = QtWidgets.QComboBox(self.hotkey_dialog)
+        self.key_dropdown.addItems([
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 
+            "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", 
+            "3", "4", "5", "6", "7", "8", "9", "0", "F1", "F2", "F3", "F4", "F5", 
+            "F6", "F7", "F8", "F9", "F10", "F11", "F12"
+        ])
+        self.key_dropdown.setStyleSheet("background-color: #2d2d2d; color: white; border: solid 1px #ccc; border-radius: 3px; height:30px; font-size: 14px;")
+        layout.addWidget(self.key_dropdown)
+
+        # Set current hotkey in dropdowns
+        current_hotkey = self.config["hotkey"]
+        modifier, key = current_hotkey.rsplit("+", 1)
+        self.modifier_dropdown.setCurrentText(modifier)
+        self.key_dropdown.setCurrentText(key)
 
         button_layout = QtWidgets.QHBoxLayout()
 
@@ -715,37 +741,38 @@ class PopupApp(QtWidgets.QWidget):
         self.hotkey_dialog.setLayout(layout)
         self.hotkey_dialog.show()
 
-        self.hotkey_input.setFocus()
-        self.hotkey_input.keyPressEvent = self.capture_hotkey
-
-    def capture_hotkey(self, event):
-        key = event.key()
-        modifiers = event.modifiers()
-        if key in [Qt.Key_Return, Qt.Key_Enter]:
-            return
-        if key == Qt.Key_Escape:
-            self.hotkey_dialog.close()
-            return
-        if not (modifiers & Qt.ControlModifier and modifiers & Qt.AltModifier):
-            return
-        key_sequence = QtGui.QKeySequence(modifiers | key).toString()
-        self.hotkey_input.setText(key_sequence)
-
     def save_new_hotkey(self):
-        new_hotkey = self.hotkey_input.text().strip()
-        if new_hotkey and "Ctrl+Alt+" in new_hotkey:
+        modifier = self.modifier_dropdown.currentText()
+        key = self.key_dropdown.currentText()
+        new_hotkey = f"{modifier}+{key}"
+        
+        # List of common hotkey combinations to avoid
+        common_hotkeys = [
+            "Ctrl+C", "Ctrl+V", "Ctrl+X", "Ctrl+A", "Ctrl+S",
+            "Ctrl+Z", "Ctrl+Y", "Ctrl+P", "Ctrl+N", "Ctrl+O",
+            "Ctrl+F", "Ctrl+H", "Ctrl+G", "Ctrl+T", "Ctrl+W",
+            "Ctrl+Q", "Ctrl+R", "Ctrl+E", "Ctrl+D", "Ctrl+B",
+            "Ctrl+U", "Ctrl+I", "Ctrl+K", "Ctrl+L", "Ctrl+M"
+        ]
+        
+        if new_hotkey in common_hotkeys:
+            QtWidgets.QMessageBox.warning(self, "Invalid Hotkey", f"The hotkey {new_hotkey} is a common shortcut and cannot be used.")
+            return
+        
+        try:
+            keyboard.add_hotkey(new_hotkey, self.show_and_focus, suppress=True)
             self.config["hotkey"] = new_hotkey
             self.save_data()
             QtWidgets.QMessageBox.information(self, "Hotkey Changed", f"Hotkey changed to: {new_hotkey}")
             self.update_hotkey_listener()
-        else:
-            QtWidgets.QMessageBox.warning(self, "Invalid Hotkey", "Please enter a valid hotkey with Ctrl and Alt modifiers.")
-        self.hotkey_dialog.close()
+            self.hotkey_dialog.close()
+        except Exception as e:
+            QtWidgets.QMessageBox.warning(self, "Hotkey Error", f"Failed to set hotkey: {new_hotkey}. It might be in use by another application.")
 
     def update_hotkey_listener(self):
         keyboard.clear_all_hotkeys()
         hotkey = self.config.get("hotkey", "ctrl+alt+p")
-        keyboard.add_hotkey(hotkey, self.show_and_focus)
+        keyboard.add_hotkey(hotkey, self.show_and_focus, suppress=True)  # Suppress the hotkey globally
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -796,7 +823,7 @@ if __name__ == "__main__":
     # Add hotkey listener in background thread
     def listen_hotkeys():
         hotkey = config.get("hotkey", "ctrl+alt+p")
-        keyboard.add_hotkey(hotkey, window.show_and_focus)
+        keyboard.add_hotkey(hotkey, window.show_and_focus, suppress=True)  # Suppress the hotkey globally
 							   
 		 
     hotkey_thread = threading.Thread(target=listen_hotkeys, daemon=True)
