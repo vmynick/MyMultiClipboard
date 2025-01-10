@@ -39,11 +39,6 @@
             "color": "#bae1ff"
         },
         {
-            "name": "Example data line3",
-            "data": "Example data line 1000",
-            "color": "#d3d3d3"
-        },
-        {
             "name": "ABC",
             "data": "012",
             "color": "#baffc9"
@@ -62,6 +57,11 @@
             "name": "0101",
             "data": "000",
             "color": "#ffffba"
+        },
+        {
+            "name": "Example data line3",
+            "data": "Example data line 1000",
+            "color": "#d3d3d3"
         },
         {
             "name": "rtzertzr",
