@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+## pyinstaller --onefile --icon=.\icon2.ico --name=MyMultiClipboard.exe --distpath=MyMultiClipboard .\popup2.py ##
+
 import json
 import os
 import sys
