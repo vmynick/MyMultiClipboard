@@ -166,6 +166,46 @@ class PopupApp(QtWidgets.QWidget):
         # Add a spacer to push the buttons to the top-right
         MXbutton_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
+        # Up Arrow Button
+        up_button = QtWidgets.QPushButton("↑")
+        up_button.setFixedSize(20, 20)
+        up_button.setStyleSheet("""
+            QPushButton {
+                background-color: #cccccc; 
+                color: white; 
+                border: none; 
+                border-radius: 3px; 
+                padding: 3px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
+        up_button.setToolTip("Move Up")
+        up_button.clicked.connect(self.move_item_up)
+
+        # Down Arrow Button
+        down_button = QtWidgets.QPushButton("↓")
+        down_button.setFixedSize(20, 20)
+        down_button.setStyleSheet("""
+            QPushButton {
+                background-color: #cccccc; 
+                color: white; 
+                border: none; 
+                border-radius: 3px; 
+                padding: 3px; 
+                font-size: 12px; 
+                font-weight: bold;
+            }
+            QPushButton:focus {
+                border: 2px solid gray;
+            }
+        """)
+        down_button.setToolTip("Move Down")
+        down_button.clicked.connect(self.move_item_down)
+
         # Hotkey Button
         hotkey_button = QtWidgets.QPushButton("H")
         hotkey_button.setFixedSize(20, 20)
@@ -227,6 +267,8 @@ class PopupApp(QtWidgets.QWidget):
         close_button.clicked.connect(self.close)
 
         # Add buttons to the layout
+        MXbutton_layout.addWidget(up_button, alignment=QtCore.Qt.AlignRight)
+        MXbutton_layout.addWidget(down_button, alignment=QtCore.Qt.AlignRight)
         MXbutton_layout.addWidget(hotkey_button, alignment=QtCore.Qt.AlignRight)
         MXbutton_layout.addWidget(minimize_button, alignment=QtCore.Qt.AlignRight)
         MXbutton_layout.addWidget(close_button, alignment=QtCore.Qt.AlignRight)

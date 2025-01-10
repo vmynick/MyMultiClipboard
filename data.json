@@ -2,14 +2,9 @@
     "hotkey": "Ctrl+Alt+M",
     "window_width": 550,
     "window_height": 350,
-    "window_x": 2780,
-    "window_y": 941,
+    "window_x": 2545,
+    "window_y": 1178,
     "data": [
-        {
-            "name": "Example",
-            "data": "http://example.com",
-            "color": "#FFB3BA"
-        },
         {
             "name": "a",
             "data": "a",
@@ -19,6 +14,11 @@
             "name": "d",
             "data": "d",
             "color": "#d3d3d3"
+        },
+        {
+            "name": "Example",
+            "data": "http://example.com",
+            "color": "#FFB3BA"
         },
         {
             "name": "bb",
